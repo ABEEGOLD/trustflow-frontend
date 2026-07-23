@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Navbar } from '../components/organisms'
+import { MarkdownRenderer } from '../components/atoms'
 import { useDebouncedValue, useGigsExplorer } from '../hooks'
 import type { GigSort } from './api/gigs'
 
@@ -263,10 +264,10 @@ const Explore: NextPage = () => {
                             {gig.title}
                           </h3>
 
-                          {/* Description */}
-                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                            {gig.description}
-                          </p>
+                          {/* Description - with markdown preview */}
+                          <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+                            <MarkdownRenderer content={gig.description} className="prose-sm" />
+                          </div>
                         </div>
 
                         {/* Footer */}
