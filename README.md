@@ -44,6 +44,7 @@ TrustFlow Frontend is the Next.js web application that gives users a seamless in
 - **`/`** - Landing page with feature showcase
 - **`/dashboard`** - User dashboard (My Gigs)
 - **`/dashboard/disputes`** - Active disputes
+- **`/dashboard/contracts`** - Contract bindings status and interaction
 - **`/dashboard/profile`** - User profile and reputation
 - **`/dashboard/settings`** - Account settings
 - **`/explore`** - Browse available gigs
