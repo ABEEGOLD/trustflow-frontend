@@ -1,37 +1,32 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  lint-and-build:
+  lint-typecheck-build:
+    name: Lint, Typecheck & Build (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18, 20]
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-node${{ matrix.node-version }}-
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -39,11 +34,11 @@ jobs:
       - name: Verify contract bindings are up-to-date
         run: npm run codegen:validate
 
-      - name: Run linter
-        run: npm run lint
-
-      - name: Run type check
+      - name: TypeScript type check
         run: npm run typecheck
 
-      - name: Build project
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
         run: npm run build
