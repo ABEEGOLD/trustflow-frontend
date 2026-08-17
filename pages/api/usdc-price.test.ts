@@ -40,5 +40,9 @@ describe('/api/usdc-price', () => {
     expect(data.price).toBeGreaterThanOrEqual(0.99);
     expect(data.price).toBeLessThanOrEqual(1.01);
     expect(typeof data.timestamp).toBe('number');
+    expect(data).toMatchSnapshot({
+      timestamp: expect.any(Number),
+      price: expect.any(Number)
+    });
   });
 });

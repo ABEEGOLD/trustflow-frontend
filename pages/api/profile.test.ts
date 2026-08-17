@@ -53,6 +53,7 @@ describe('/api/profile', () => {
     const data = await response.json();
     expect(data.source).toBe('mock');
     expect(data.walletAddress).toBe('G123');
+    expect(data).toMatchSnapshot();
   });
 
   it('should return mock profile if backend fetch fails', async () => {

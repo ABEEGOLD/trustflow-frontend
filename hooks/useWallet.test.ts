@@ -26,6 +26,7 @@ describe('useWallet', () => {
 
   it('should initialize with null state if disconnected', async () => {
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
     
     // Fast forward for initial sync
     await act(async () => {
@@ -48,12 +49,15 @@ describe('useWallet', () => {
     });
 
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
 
-    await waitFor(() => {
-      expect(result.current.account).toEqual({
-        address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
-        displayName: 'GABC...7890',
-      });
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
+    });
+
+    expect(result.current.account).toEqual({
+      address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+      displayName: 'GABC...7890',
     });
 
     expect(result.current.isAllowed).toBe(true);
@@ -62,6 +66,7 @@ describe('useWallet', () => {
 
   it('should handle connect action', async () => {
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
     
     setMockConnected(true);
     setMockAllowed(true);
@@ -80,10 +85,13 @@ describe('useWallet', () => {
     setMockPublicKey('GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
 
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
 
-    await waitFor(() => {
-      expect(result.current.account?.address).toBe('GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
     });
+
+    expect(result.current.account?.address).toBe('GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890');
 
     act(() => {
       result.current.disconnect();
@@ -104,10 +112,13 @@ describe('useWallet', () => {
     setMockPublicKey('G111');
 
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
 
-    await waitFor(() => {
-      expect(result.current.account?.address).toBe('G111');
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
     });
+
+    expect(result.current.account?.address).toBe('G111');
 
     setMockPublicKey('G222');
 
@@ -123,10 +134,13 @@ describe('useWallet', () => {
     setMockPublicKey('G111');
 
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
 
-    await waitFor(() => {
-      expect(result.current.account?.address).toBe('G111');
+    await act(async () => {
+      jest.advanceTimersByTime(2000);
     });
+
+    expect(result.current.account?.address).toBe('G111');
 
     let signed: string;
     await act(async () => {
@@ -138,6 +152,7 @@ describe('useWallet', () => {
 
   it('should throw when signing transaction without an account', async () => {
     const { result } = renderHook(() => useWallet());
+    await act(async () => { await Promise.resolve(); });
 
     await expect(result.current.signTransaction('unsigned-xdr')).rejects.toThrow(
       'Connect a wallet before signing a transaction'
